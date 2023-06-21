@@ -181,7 +181,6 @@ public class AServerThread extends func{
                 } else {
                     out.println(room_name + "に参加できませんでした。");// 10
                     out.println(false);// 10.5
-                    break;
                 }
 
             /*---------------------------------------------------------------------------------------- */
