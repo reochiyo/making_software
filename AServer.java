@@ -7,7 +7,6 @@ public class AServer {
     public static void main(String[] args) throws IOException {
 
         ServerSocket s = new ServerSocket(PORT); // ソケットを作成する
-
         // Scanner sc = new Scanner(System.in);
 
         try {
@@ -16,7 +15,7 @@ public class AServer {
                 AServerThread thread = new AServerThread(socket);//スレッド生成
                 thread.start();//スレッド実行
             }
-            
+
         } finally {
             s.close();
         }

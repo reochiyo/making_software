@@ -5,11 +5,11 @@ import java.util.List;
 
 public class AServerThread extends func{
     private Socket socket;
-    
+
     public AServerThread(Socket socket){
         this.socket = socket;
     }
-    
+
     public void run() {
         try {
             // データベースの設定
@@ -106,19 +106,19 @@ public class AServerThread extends func{
             }
         }
     }
-    
+
     private void ChatOption(BufferedReader in, PrintWriter out, File db, String username) throws IOException {
         while (true) {
             Integer option2 = Integer.parseInt(in.readLine()); // 6
             File chat_log;
 
-            if (option2 == 1) {
+            if (option2 == 1) {// 1.新規作成
                 // チャットルームの名前を受信
                 String room_name = in.readLine();// 7
                 // room_nameの制限 \ / : * ? " < > |
                 if (checkname(room_name) == false) {
                     out.println("チャットルーム名に \\ / : * ? \" < > | は使えません。");// 8
-                }else {
+                } else {
 
                     // チャットルームがあるかdbから探す
                     List<String> list_data2 = new ArrayList<String>();
@@ -142,10 +142,10 @@ public class AServerThread extends func{
                 }
 
             /*---------------------------------------------------------------------------------------- */
-            } else if (option2 == 2) {
+            } else if (option2 == 2) {// 2.既存に参加
                 String room_name = in.readLine();// 9
 
-                 // ルームをdbから探してチャットルームに参加する
+                // ルームをdbから探してチャットルームに参加する
                 List<String> list_data2 = new ArrayList<String>();
                 list_data2 = check_chat_room(db, room_name);
 
@@ -166,14 +166,14 @@ public class AServerThread extends func{
                         * }
                         */
                         chat_log_reader.close();
-                        
+
                         String message = in.readLine();
-                                                
+
                         String chat_log_data = username + " : " +message;// 12
                         chat_log_writer.println(chat_log_data);
                         chat_log_writer.close();
 
-                         if (message.equals("END")) {
+                        if (message.equals("END")) {
                             break;
                         }
                     }
@@ -184,7 +184,7 @@ public class AServerThread extends func{
                 }
 
             /*---------------------------------------------------------------------------------------- */
-            } else if (option2 == 3) {
+            } else if (option2 == 3) {// 3.退出する
                 break;
             }
         }
