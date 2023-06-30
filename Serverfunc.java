@@ -3,17 +3,22 @@ import java.util.*;
 import java.math.BigInteger;
 import java.security.*;
 
-public class func extends Thread {
+public class Serverfunc extends Thread {
     // execute sql
     public static void execute_sql(File db, String sql) {
         String[] cmd = { "sqlite3", db.getAbsolutePath(), sql };
+        Process p = null;
         try {
-            Process p = Runtime.getRuntime().exec(cmd);
+            p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
         } catch (IOException e) {
             System.out.println(e);
         } catch (InterruptedException e) {
             System.out.println(e);
+        } finally {
+            if (p != null) {
+                p.destroy();
+            }
         }
     }
 
@@ -21,11 +26,11 @@ public class func extends Thread {
     public static List<String> execute_sql_return_data(File db, String sql) {
         List<String> data = new ArrayList<String>();
         String[] cmd = { "sqlite3", db.getAbsolutePath(), sql };
+        Process p = null;
         try {
-            Process p = Runtime.getRuntime().exec(cmd);
+            p = Runtime.getRuntime().exec(cmd);
             p.waitFor();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
                 data.add(line);
@@ -34,6 +39,10 @@ public class func extends Thread {
             System.out.println(e);
         } catch (InterruptedException e) {
             System.out.println(e);
+        } finally {
+            if (p != null) {
+                p.destroy();
+            }
         }
         return data;
     }
@@ -50,7 +59,7 @@ public class func extends Thread {
         execute_sql(db, sql);
     }
 
-    // add user to database
+    // add user and password to database
     public static void add_user(File db, String username, String password) {
         String sql = "INSERT INTO userstable(username,password) VALUES ('" +
                 username +
@@ -69,10 +78,7 @@ public class func extends Thread {
     }
 
     // login user
-    public static List<String> login_user(
-            File db,
-            String username,
-            String password) {
+    public static List<String> login_user(File db,String username,String password) {
         String sql = "SELECT * FROM userstable WHERE username = '" +
                 username +
                 "' AND password = '" +
@@ -112,13 +118,5 @@ public class func extends Thread {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static Boolean checkname(String name){
-        if (name.contains("\\") || name.contains("/") || name.contains(":")|| name.contains("*") || name.contains("?")|| name.contains("\"") || name.contains("<")|| name.contains(">") || name.contains("|")){
-            return false;
-        }else{
-            return true;
-            }
     }
 }

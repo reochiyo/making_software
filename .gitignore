@@ -1,2 +1,4 @@
 *.db
 *.class
+*_log.txt
+/client/*
